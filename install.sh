@@ -15,4 +15,4 @@ do
     ln -sf "$(pwd)"/"$f" "$HOME"/"$f"
 done
 
-ln -sf /root/dotfiles/fish /root/.config
+ln -sf "$(pwd)"/fish "$HOME"/.config
