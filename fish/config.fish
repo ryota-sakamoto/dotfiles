@@ -1,4 +1,4 @@
-set -x PATH /Users/ryota/go/bin $PATH
+set -x PATH (go env GOPATH) $PATH
 
 if not functions -q fisher
     set -q XDG_CONFIG_HOME; or set XDG_CONFIG_HOME ~/.config
