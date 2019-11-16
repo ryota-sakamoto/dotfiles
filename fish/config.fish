@@ -10,3 +10,6 @@ end
 
 # The next line updates PATH for the Google Cloud SDK.
 if [ -f '/Users/ryota/google-cloud-sdk/path.fish.inc' ]; . '/Users/ryota/google-cloud-sdk/path.fish.inc'; end
+
+set -x GOPATH $HOME/go
+set -x PATH $PATH $GOPATH/bin
