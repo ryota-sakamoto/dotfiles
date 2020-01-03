@@ -16,3 +16,4 @@ set -x PATH $PATH $GOPATH/bin
 set -x PATH $PATH $HOME/.cargo/bin
 
 alias k="kubectl"
+set -gx PATH $PATH $HOME/.krew/bin
