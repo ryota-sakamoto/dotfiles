@@ -5,6 +5,8 @@ tmux
 fish
 peco
 
+go
+
 kubectl
 kustomize
 kind
