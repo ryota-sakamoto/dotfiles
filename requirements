@@ -4,6 +4,8 @@ vim
 tmux
 fish
 peco
+
 kubectl
 kustomize
+kind
 istioctl
