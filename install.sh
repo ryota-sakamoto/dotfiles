@@ -18,4 +18,9 @@ done
 ln -sf "$(pwd)"/fish "$HOME"/.config
 
 mkdir -p "$HOME"/.tmux/plugins
-git clone https://github.com/tmux-plugins/tpm "$HOME"/.tmux/plugins/tpm
+if [ ! -d "$HOME"/.tmux/plugins/tpm ]; then
+  git clone https://github.com/tmux-plugins/tpm "$HOME"/.tmux/plugins/tpm
+else
+  cd "$HOME"/.tmux/plugins/tpm
+  git pull
+fi
