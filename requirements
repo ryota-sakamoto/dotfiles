@@ -11,3 +11,4 @@ kubectl
 kustomize
 kind
 istioctl
+kubectx
