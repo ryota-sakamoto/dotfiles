@@ -8,4 +8,4 @@ install:
 
 .PHONY: multipass
 multipass:
-	multipass launch -n imperative -c 2 -m 2G --cloud-init ./multipass/cloud-init.yml
+	multipass launch -n primary -c 2 -m 2G --cloud-init ./multipass/cloud-init.yml
