@@ -14,6 +14,7 @@ if [ -f '/Users/ryota/google-cloud-sdk/path.fish.inc' ]; . '/Users/ryota/google-
 set -x GOPATH $HOME/go
 set -x PATH $PATH $GOPATH/bin
 set -x PATH $PATH $HOME/.cargo/bin
+set -x PATH $PATH /Library/TeX/texbin
 
 alias k="kubectl"
 set -gx PATH $PATH $HOME/.krew/bin
