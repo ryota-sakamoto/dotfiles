@@ -15,6 +15,7 @@ set -x GOPATH $HOME/go
 set -x PATH $PATH $GOPATH/bin
 set -x PATH $PATH $HOME/.cargo/bin
 set -x PATH $PATH /Library/TeX/texbin
+set -x PATH $PATH /usr/local/opt/dosfstools/sbin/
 
 alias k="kubectl"
 set -gx PATH $PATH $HOME/.krew/bin
