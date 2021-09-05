@@ -9,6 +9,7 @@ go
 
 kubectl
 kubectx
+kustomize
 
 protoc
 
