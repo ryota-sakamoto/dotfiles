@@ -10,6 +10,7 @@ end
 if [ -f '/Users/ryota/google-cloud-sdk/path.fish.inc' ]; . '/Users/ryota/google-cloud-sdk/path.fish.inc'; end
 
 set -x GOPATH $HOME/go
+set -x PATH $PATH /usr/local/go/bin
 set -x PATH $PATH $GOPATH/bin
 set -x PATH $PATH $HOME/.cargo/bin
 set -x PATH $PATH /Library/TeX/texbin
