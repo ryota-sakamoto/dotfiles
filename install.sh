@@ -16,6 +16,7 @@ do
 done
 
 ln -sf "$(pwd)"/fish "$HOME"/.config
+ln -sf "$(pwd)/.alacritty.yml" "$HOME/.alacritty.yml"
 
 mkdir -p "$HOME"/.tmux/plugins
 if [ ! -d "$HOME"/.tmux/plugins/tpm ]; then
@@ -24,3 +25,4 @@ else
   cd "$HOME"/.tmux/plugins/tpm
   git pull
 fi
+
