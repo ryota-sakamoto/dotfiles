@@ -10,6 +10,6 @@ go
 kubectl
 kubectx
 kustomize
+kubeseal
 
 protoc
-
