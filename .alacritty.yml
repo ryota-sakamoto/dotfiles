@@ -1,4 +1,9 @@
 indow:
   decorations: full
 
+window:
+  dimensions:
+    columns: 200
+    lines: 60
+
 background_opacity: 0.85

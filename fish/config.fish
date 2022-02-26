@@ -18,3 +18,5 @@ set -x PATH $PATH /usr/local/opt/dosfstools/sbin/
 
 alias k="kubectl"
 set -gx PATH $PATH $HOME/.krew/bin
+set -gx VOLTA_HOME "$HOME/.volta"
+set -gx PATH "$VOLTA_HOME/bin" $PATH
