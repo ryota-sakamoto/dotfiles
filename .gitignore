@@ -3,3 +3,4 @@ fish/functions/fish_prompt.fish
 fish/functions/fisher.fish
 fish/fish_variables
 fish/config.fish.backup
+fish/fish
