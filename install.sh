@@ -3,7 +3,7 @@
 set -eux
 
 TOOLS=`cat requirements`
-SCRIPT_FILES="./script/*"
+SCRIPT_DIR="./script/*"
 
 for tool in $TOOLS
 do
@@ -13,7 +13,7 @@ do
     fi
 done
 
-for f in $SCRIPT_FILES
+for f in $SCRIPT_DIR
 do
-    bash $f
+    bash $f/install.sh
 done
