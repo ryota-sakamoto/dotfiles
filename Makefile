@@ -4,7 +4,7 @@ error:
 
 .PHONY: install
 install:
-	./install.sh
+	bash install.sh
 
 .PHONY: multipass
 multipass:

@@ -2,7 +2,7 @@
 # install & update
 
 ```bash
-$ ./install.sh
+$ make install
 ```
 
 # custom tools
