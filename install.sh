@@ -7,7 +7,7 @@ SCRIPT_DIR="./script/*"
 
 for tool in $TOOLS
 do
-    which $tool >> /dev/null 2>&1
+    which $tool >> /dev/null 2>&1 && :
     if [ $? -ne 0 ]; then
         echo "You should be install \"$tool\""
     fi
