@@ -1,5 +1,5 @@
 if not functions -q fisher
-    # curl -sL https://git.io/fisher | source && fisher install jorgebucaran/fisher
+    curl -sL https://git.io/fisher | source && fisher install jorgebucaran/fisher
 end
 
 function fish_user_key_bindings
@@ -20,3 +20,4 @@ alias k="kubectl"
 set -gx PATH $PATH $HOME/.krew/bin
 set -gx VOLTA_HOME "$HOME/.volta"
 set -gx PATH "$VOLTA_HOME/bin" $PATH
+set -gx PATH $PATH $HOME/.deno/bin
