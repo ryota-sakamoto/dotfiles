@@ -47,7 +47,7 @@ function fish_prompt
     else
       set git_info '(' $green $git_branch $normal ')'
     end
-    echo -n -s ' · ' $git_info $normal
+    echo -n -s ' ' $git_info $normal
   end
 
   set -l prompt_color $red
