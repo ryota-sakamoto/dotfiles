@@ -6,7 +6,7 @@ brew "chezmoi"
 brew "zsh-autosuggestions"
 brew "zsh-syntax-highlighting"
 brew "tmux"
-brew "peco"
+brew "fzf"
 cask "ghostty"
 cask "alacritty"
 
