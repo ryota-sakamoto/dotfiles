@@ -12,6 +12,10 @@ cask "alacritty"
 
 # Everyday CLI
 brew "gh"
+brew "ripgrep"
+brew "fd"
+brew "bat"
+brew "htop"
 brew "jq"
 brew "yq"
 brew "tree"
@@ -29,9 +33,9 @@ brew "cloudflared"
 # Development
 cask "visual-studio-code"
 cask "orbstack"
-brew "go"
-brew "golangci-lint"
+brew "go"  # Go/Rust dev tools: home/run_onchange_after_40-dev-tools.sh.tmpl
 brew "rustup"
+brew "shellcheck"
 brew "zig"
 brew "mold"
 brew "clang-format"

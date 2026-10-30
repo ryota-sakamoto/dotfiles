@@ -1,0 +1,19 @@
+#!/bin/bash
+# Go and Rust dev tools, built with each language's own installer: faster
+# than Homebrew on Intel Macs, where these formulae compile from source.
+# Re-runs whenever this file changes; bump the list to update.
+set -eu
+
+if command -v go >/dev/null; then
+  go install golang.org/x/tools/gopls@latest
+  go install golang.org/x/tools/cmd/goimports@latest
+  go install honnef.co/go/tools/cmd/staticcheck@latest
+  go install github.com/golangci/golangci-lint/v2/cmd/golangci-lint@latest
+fi
+{{- if eq .chezmoi.os "darwin" }}
+
+if command -v cargo >/dev/null; then
+  # delta: git diffs, hyperfine: command benchmarks, oha: HTTP load testing
+  nice -n 15 cargo install --locked git-delta hyperfine oha
+fi
+{{- end }}
