@@ -1,0 +1,15 @@
+{{ if eq .chezmoi.os "darwin" -}}
+#!/bin/bash
+# OrbStack settings; re-runs whenever this file changes. See `orb config show`.
+set -eu
+
+if ! command -v orb >/dev/null; then
+  echo "skipping OrbStack config: orb not installed" >&2
+  exit 0
+fi
+
+orb config set memory_mib 8192
+# Keep container ports on this Mac only (practice DBs use well-known passwords)
+orb config set docker.expose_ports_to_lan false
+orb config set machines.expose_ports_to_lan false
+{{ end -}}
