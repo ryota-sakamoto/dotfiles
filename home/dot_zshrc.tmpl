@@ -1,0 +1,100 @@
+# Managed by chezmoi: edit ~/dotfiles/home/dot_zshrc.tmpl, then `chezmoi apply`
+# (Cargo is loaded in ~/.zshenv)
+
+typeset -U path  # drop duplicate PATH entries
+
+export GOPATH="$HOME/go"
+export VOLTA_HOME="$HOME/.volta"
+export EDITOR=vim
+
+path=(
+  "$HOME/.local/bin"
+  "$VOLTA_HOME/bin"
+  $path
+  "$GOPATH/bin"
+  "$HOME/.krew/bin"
+  "$HOME/.deno/bin"
+)
+{{- if eq .chezmoi.os "darwin" }}
+{{-   $brew := "/usr/local" }}
+{{-   if eq .chezmoi.arch "arm64" }}{{ $brew = "/opt/homebrew" }}{{ end }}
+
+# macOS (static version of `brew shellenv`, which costs ~100 ms per shell)
+export HOMEBREW_PREFIX={{ $brew }}
+path=({{ $brew }}/bin {{ $brew }}/sbin $path)
+fpath=({{ $brew }}/share/zsh/site-functions $fpath)
+path+=(
+  "$HOME/.antigravity/antigravity/bin"
+  /Library/TeX/texbin
+  {{ $brew }}/opt/dosfstools/sbin
+  {{ $brew }}/opt/llvm/bin
+)
+zsh_plugin_dir={{ $brew }}/share
+{{- else }}
+
+zsh_plugin_dir=/usr/share
+{{- end }}
+path=(${^path}(N-/))  # drop entries that don't exist on this machine
+export PATH
+
+alias k="kubectl"
+alias ll="ls -lah"
+
+# History
+HISTFILE="$HOME/.zsh_history"
+HISTSIZE=100000
+SAVEHIST=100000
+setopt share_history hist_ignore_all_dups hist_reduce_blanks
+
+# Completion: rebuild the cache at most once a day, otherwise load it as is
+autoload -Uz compinit
+() {
+  setopt local_options extended_glob
+  if [[ -n ~/.zcompdump(#qN.mh+24) || ! -f ~/.zcompdump ]]; then
+    compinit
+  else
+    compinit -C
+  fi
+}
+
+# Prompt: user@host:dir (git branch)
+# The branch is read from .git/HEAD directly: running git (or vcs_info) on
+# every prompt costs 50-250 ms.
+precmd() {
+  git_info=
+  local d=$PWD head g
+  while [[ -n $d ]]; do
+    if [[ -f $d/.git/HEAD ]]; then
+      head=$(<$d/.git/HEAD); break
+    elif [[ -f $d/.git ]]; then  # worktree or submodule: ".git" is a file
+      g=$(<$d/.git); g=${g#gitdir: }; [[ $g != /* ]] && g=$d/$g
+      [[ -f $g/HEAD ]] && head=$(<$g/HEAD); break
+    fi
+    d=${d%/*}
+  done
+  [[ -z $head ]] && return
+  if [[ $head == ref:* ]]; then git_info=" (${head#ref: refs/heads/})"
+  else git_info=" (${head[1,7]})"; fi  # detached HEAD: short hash
+}
+setopt prompt_subst
+PROMPT='%F{blue}%n@%m%f:%F{cyan}%~%f%F{yellow}${git_info}%f %# '
+
+# Ctrl-R: search history with peco
+if (( $+commands[peco] )); then
+  peco_select_history() {
+    BUFFER=$(fc -lnr 1 | awk '!seen[$0]++' | peco --layout=bottom-up --query "$LBUFFER")
+    CURSOR=${#BUFFER}
+    zle reset-prompt
+  }
+  zle -N peco_select_history
+  bindkey '^R' peco_select_history
+fi
+
+# fish-like autosuggestions and highlighting, if installed
+for f in $zsh_plugin_dir/zsh-autosuggestions/zsh-autosuggestions.zsh \
+         $zsh_plugin_dir/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh; do
+  [[ -r $f ]] && source "$f"
+done
+unset zsh_plugin_dir f
+
+[[ -r ~/.zshrc.local ]] && source ~/.zshrc.local  # machine-specific, not in git
