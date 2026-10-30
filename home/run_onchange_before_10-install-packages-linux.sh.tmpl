@@ -1,0 +1,14 @@
+{{ if eq .chezmoi.os "linux" -}}
+#!/bin/bash
+# Base tools for Linux machines (remote node, ISUCON servers). Debian/Ubuntu only.
+set -eu
+
+if ! command -v apt-get >/dev/null; then
+  echo "skipping package install: no apt-get" >&2
+  exit 0
+fi
+
+sudo apt-get update -q
+sudo apt-get install -y -q zsh zsh-autosuggestions zsh-syntax-highlighting \
+  tmux vim git curl jq peco tree htop
+{{ end -}}

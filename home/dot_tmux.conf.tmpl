@@ -1,0 +1,118 @@
+# ~/.tmux.conf — tmux 3.5+
+
+# ---------------------------------------------------------------------------
+# Prefix
+# ---------------------------------------------------------------------------
+unbind C-b
+set -g prefix C-a
+bind C-a send-prefix
+
+# ---------------------------------------------------------------------------
+# Terminal: true color, undercurl, focus, clipboard, modern keys
+# ---------------------------------------------------------------------------
+set -g default-terminal "tmux-256color"
+set -as terminal-features ",xterm-256color:RGB,xterm-ghostty:RGB,xterm-kitty:RGB,alacritty:RGB,wezterm:RGB"
+set -as terminal-features ",*:usstyle"          # undercurl / colored underlines (neovim diagnostics)
+set -g extended-keys on                          # pass C-Enter, S-Enter, etc. to apps
+set -as terminal-features ",*:extkeys"
+set -g allow-passthrough on                      # image protocols, OSC sequences
+set -g set-clipboard on                          # OSC 52 clipboard (works over SSH)
+set -g focus-events on
+set -g escape-time 10                            # no lag on Esc in vim
+set -g set-titles on
+set -g set-titles-string "#S / #W"
+
+# ---------------------------------------------------------------------------
+# General behaviour
+# ---------------------------------------------------------------------------
+set -g mouse on
+set -g history-limit 100000
+set -g base-index 1
+setw -g pane-base-index 1
+set -g renumber-windows on
+set -g display-time 2000
+set -g display-panes-time 2000
+set -g status-interval 5
+setw -g aggressive-resize on
+setw -g automatic-rename on
+set -g detach-on-destroy off                     # switch to another session instead of detaching
+
+# ---------------------------------------------------------------------------
+# Splits & windows (open in the current directory)
+# ---------------------------------------------------------------------------
+unbind '"'
+unbind %
+bind | split-window -h -c "#{pane_current_path}"
+bind \\ split-window -h -c "#{pane_current_path}"
+bind - split-window -v -c "#{pane_current_path}"
+bind c new-window -c "#{pane_current_path}"
+bind Tab last-window
+
+# ---------------------------------------------------------------------------
+# Pane navigation & resizing (vim-style)
+# ---------------------------------------------------------------------------
+bind h select-pane -L
+bind j select-pane -D
+bind k select-pane -U
+bind l select-pane -R
+bind -r H resize-pane -L 5
+bind -r J resize-pane -D 5
+bind -r K resize-pane -U 5
+bind -r L resize-pane -R 5
+bind -r < swap-window -d -t -1
+bind -r > swap-window -d -t +1
+
+# Session picker and floating scratch shell
+bind s choose-tree -Zs
+bind ` display-popup -E -w 80% -h 80% -d "#{pane_current_path}"
+
+# ---------------------------------------------------------------------------
+# Copy mode (vi keys, system clipboard)
+# ---------------------------------------------------------------------------
+setw -g mode-keys vi
+bind Enter copy-mode
+bind -T copy-mode-vi v send -X begin-selection
+bind -T copy-mode-vi C-v send -X rectangle-toggle
+{{- if eq .chezmoi.os "darwin" }}
+bind -T copy-mode-vi y send -X copy-pipe-and-cancel "pbcopy"
+bind -T copy-mode-vi MouseDragEnd1Pane send -X copy-pipe-and-cancel "pbcopy"
+{{- else }}
+# Linux/SSH: set-clipboard (OSC 52) sends the copy to your local terminal
+bind -T copy-mode-vi y send -X copy-pipe-and-cancel
+bind -T copy-mode-vi MouseDragEnd1Pane send -X copy-pipe-and-cancel
+{{- end }}
+bind -T copy-mode-vi Escape send -X cancel
+
+# ---------------------------------------------------------------------------
+# Reload
+# ---------------------------------------------------------------------------
+bind r source-file ~/.tmux.conf \; display-message "Config reloaded"
+
+# ---------------------------------------------------------------------------
+# Look: minimal status bar on top (Tokyo Night-ish palette)
+# ---------------------------------------------------------------------------
+set -g status-position top
+set -g status-justify left
+set -g status-style "bg=default,fg=#a9b1d6"
+set -g status-left-length 40
+set -g status-right-length 80
+set -g status-left "#[fg=#1a1b26,bg=#7aa2f7,bold] #S #[bg=default] "
+set -g status-right "#{?client_prefix,#[fg=#1a1b26 bg=#e0af68 bold] PREFIX #[default] ,}#[fg=#565f89]#h  %Y-%m-%d %H:%M "
+setw -g window-status-format "#[fg=#565f89] #I:#W#{?window_zoomed_flag, [Z],} "
+setw -g window-status-current-format "#[fg=#7aa2f7,bold] #I:#W#{?window_zoomed_flag, [Z],} "
+setw -g window-status-separator ""
+set -g pane-border-style "fg=#3b4261"
+set -g pane-active-border-style "fg=#7aa2f7"
+set -g pane-border-lines heavy
+set -g message-style "bg=#1a1b26,fg=#7aa2f7"
+set -g mode-style "bg=#33467c"
+set -g popup-border-lines rounded
+
+# ---------------------------------------------------------------------------
+# Plugins (prefix + I to install, prefix + U to update)
+# ---------------------------------------------------------------------------
+set -g @plugin 'tmux-plugins/tpm'
+set -g @plugin 'tmux-plugins/tmux-sensible'
+set -g @plugin 'christoomey/vim-tmux-navigator' # C-h/j/k/l across vim splits and panes
+
+run -b '~/.tmux/plugins/tpm/tpm'

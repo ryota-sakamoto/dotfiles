@@ -1,0 +1,30 @@
+set nocompatible
+set encoding=utf-8
+filetype plugin indent on
+syntax on
+
+set number
+set title
+set showmatch
+set ruler
+set laststatus=2
+set wildmenu
+set backspace=indent,eol,start
+set scrolloff=5
+
+set expandtab
+set tabstop=4
+set shiftwidth=4
+set softtabstop=4
+set autoindent
+autocmd FileType go,make setlocal noexpandtab
+
+set nowritebackup
+set nobackup
+set noswapfile
+
+set ignorecase
+set smartcase
+set incsearch
+set hlsearch
+nnoremap <ESC><ESC> :nohl<CR>

@@ -1,0 +1,5 @@
+# Same settings as alacritty.toml
+background-opacity = 0.85
+window-width = 200
+window-height = 60
+keybind = super+shift+minus=increase_font_size:1
