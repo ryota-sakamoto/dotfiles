@@ -1,0 +1,62 @@
+# macOS packages: brew bundle --file ~/dotfiles/Brewfile
+tap "hashicorp/tap"
+
+# Shell & terminal
+brew "chezmoi"
+brew "zsh-autosuggestions"
+brew "zsh-syntax-highlighting"
+brew "tmux"
+brew "peco"
+cask "ghostty"
+cask "alacritty"
+
+# Everyday CLI
+brew "gh"
+brew "jq"
+brew "yq"
+brew "tree"
+brew "watch"
+brew "coreutils"
+brew "make"
+brew "cloc"
+brew "fastfetch"
+brew "gnupg"
+brew "pinentry-mac"
+brew "telnet"
+brew "nmap"
+brew "cloudflared"
+
+# Development
+cask "visual-studio-code"
+cask "orbstack"
+brew "go"
+brew "golangci-lint"
+brew "rustup"
+brew "zig"
+brew "mold"
+brew "clang-format"
+brew "protobuf"
+brew "grpcurl"
+brew "python@3.12"
+brew "erlang"
+brew "hugo"
+brew "tectonic"
+brew "ffmpeg"
+brew "licensed"
+brew "dnsperf"
+
+# Infrastructure / Kubernetes
+brew "hashicorp/tap/terraform"
+brew "terraformer"
+brew "kubernetes-cli"
+brew "kubectx"
+brew "kustomize"
+brew "kubeseal"
+brew "kwok"
+
+# ISUCON: profiling and analysis
+brew "alp"
+brew "percona-toolkit"
+brew "mysql-client"
+brew "duckdb"
+brew "graphviz"
