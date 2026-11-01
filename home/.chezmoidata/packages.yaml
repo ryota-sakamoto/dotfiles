@@ -50,8 +50,9 @@ packages:
       - glibc-static
       - perl-open
       - python3-GitPython
+      - kdump-utils     # crash dumps from test kernels
+      - makedumpfile
     docs:
-      - texlive-scheme-full
       - graphviz
       - python3-sphinx
     monitoring:
@@ -63,10 +64,7 @@ packages:
       - vulkan-tools
     services:
       - tailscale  # repo added by the script
-      - ttyd
       - distrobox
-      - valkey-compat-redis
-      - gfs2-utils
     locale:
       - langpacks-en
       - langpacks-ja
@@ -103,7 +101,6 @@ packages:
       - hyperfine
       - oha
     linux:
-      - aichat
       - mdbook
       - mdbook-mermaid
   pipx:
@@ -112,4 +109,3 @@ packages:
   npm:
     linux:
       - "@bufbuild/buf"
-      - "@google/gemini-cli"

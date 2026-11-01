@@ -27,6 +27,16 @@ fi
 
 # Kernel build dependencies (kunit, virtme-ng, cross builds)
 sudo dnf builddep -y kernel
+
+# builddep leaves deps that were already installed marked as "dependency", so
+# `dnf autoremove` can remove them; mark them all user-installed
+mapfile -t kdeps < <(
+  dnf repoquery -q --srpm --enablerepo=fedora-source --enablerepo=updates-source \
+    --requires kernel |
+    sed -E 's/^\((.*) if .*\)$/\1/; s/ *[<>=].*$//' | sort -u |
+    xargs -d '\n' rpm -q --whatprovides --qf '%{name}\n' | grep -v ' ' | sort -u
+)
+sudo dnf mark user "${kdeps[@]}"
 {{-   end }}
 {{- else }}
 
