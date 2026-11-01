@@ -22,10 +22,11 @@ This also installs packages: the full list from `home/.chezmoidata/packages.yaml
 with dnf on Fedora (plus `dnf builddep kernel`), or a base set with apt on
 Debian/Ubuntu. Go, Rust, pipx and npm tools come from the same file. Run
 `chezmoi apply` a second time on a new machine so `.gitconfig` picks up delta
-and git-lfs once they are installed.
+and git-lfs once they are installed. Then make zsh the login shell:
 
-Linux gets a managed `~/.bashrc` too; machine-specific bash settings go in
-`~/.bashrc.local`.
+```bash
+chsh -s /usr/bin/zsh
+```
 
 ## Day to day
 
@@ -36,6 +37,6 @@ chezmoi apply           # write to ~
 chezmoi update          # git pull + apply on another machine
 ```
 
-Machine-specific settings go in `~/.zshrc.local`, `~/.bashrc.local` and
-`~/.gitconfig.local` (not in git).
+Machine-specific settings go in `~/.zshrc.local` and `~/.gitconfig.local`
+(not in git).
 Never add secrets (tokens, `~/.config/gh`) to this repo: it is public.

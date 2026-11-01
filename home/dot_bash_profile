@@ -1,2 +1,0 @@
-# Managed by chezmoi. Login shells read this instead of ~/.bashrc
-[ -f ~/.bashrc ] && . ~/.bashrc

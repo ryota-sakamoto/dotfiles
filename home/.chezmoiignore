@@ -1,7 +1,4 @@
 {{ if ne .chezmoi.os "darwin" }}
 .config/alacritty
 .config/ghostty
-{{ else }}
-.bashrc
-.bash_profile
 {{ end }}
