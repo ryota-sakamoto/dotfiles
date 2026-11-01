@@ -4,6 +4,7 @@
 # where these formulae compile from source.
 # Re-runs whenever the lists change; bump a list to update.
 set -eu
+[ -r "$HOME/.cargo/env" ] && . "$HOME/.cargo/env"  # cargo just installed by 35-installers
 {{- $os := .chezmoi.os }}
 {{- $go := concat .packages.go.all (get .packages.go $os | default list) }}
 {{- $cargo := get .packages.cargo $os | default list }}

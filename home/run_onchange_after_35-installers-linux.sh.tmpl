@@ -1,0 +1,32 @@
+{{ if and (eq .chezmoi.os "linux") (eq .chezmoi.osRelease.id "fedora") -}}
+#!/bin/bash
+# Tools installed with their upstream installers on the Fedora workstation:
+# newer than the distro packages and self-updating. Installs only what is
+# missing; update with `rustup update`, `uv self update`, and by re-running the
+# ollama installer. Runs before 40-dev-tools, which needs cargo.
+set -eu
+
+if [ ! -x "$HOME/.cargo/bin/rustup" ]; then
+  curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs |
+    sh -s -- -y --no-modify-path --component rust-analyzer,rust-src  # ~/.zshenv loads cargo
+fi
+
+if [ ! -x "$HOME/.local/bin/uv" ]; then
+  curl -LsSf https://astral.sh/uv/install.sh | env UV_NO_MODIFY_PATH=1 sh
+fi
+
+if ! command -v ollama >/dev/null; then
+  curl -fsSL https://ollama.com/install.sh | sh
+fi
+
+# ollama on the AMD iGPU through Vulkan; restart only when the settings change
+override=/etc/systemd/system/ollama.service.d/override.conf
+want='[Service]
+Environment="OLLAMA_VULKAN=1"
+Environment="OLLAMA_IGPU_ENABLE=1"'
+if [ "$(cat "$override" 2>/dev/null)" != "$want" ]; then
+  printf '%s\n' "$want" | sudo install -D -m 644 /dev/stdin "$override"
+  sudo systemctl daemon-reload
+  sudo systemctl restart ollama
+fi
+{{ end -}}

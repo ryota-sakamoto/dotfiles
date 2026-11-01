@@ -20,7 +20,9 @@ sh -c "$(curl -fsLS get.chezmoi.io)" -- -b ~/.local/bin init --apply ryota-sakam
 
 This also installs packages: the full list from `home/.chezmoidata/packages.yaml`
 with dnf on Fedora (plus `dnf builddep kernel`), or a base set with apt on
-Debian/Ubuntu. Go, Rust, pipx and npm tools come from the same file. Run
+Debian/Ubuntu. Go, Rust, pipx and npm tools come from the same file. On
+Fedora, rustup, uv and ollama (with its Vulkan GPU settings) are installed
+with their upstream installers. Run
 `chezmoi apply` a second time on a new machine so `.gitconfig` picks up delta
 and git-lfs once they are installed. Then make zsh the login shell:
 
