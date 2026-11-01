@@ -11,6 +11,9 @@ set -eu
 {{- $npm := get .packages.npm $os | default list }}
 
 if command -v go >/dev/null; then
+  # Distro Go (Fedora) pins GOTOOLCHAIN=local; let go install fetch the newer
+  # toolchain a tool requires instead of failing
+  export GOTOOLCHAIN=auto
 {{- range $go }}
   go install {{ . }}
 {{- end }}
