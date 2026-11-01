@@ -1,19 +1,44 @@
 #!/bin/bash
-# Go and Rust dev tools, built with each language's own installer: faster
-# than Homebrew on Intel Macs, where these formulae compile from source.
-# Re-runs whenever this file changes; bump the list to update.
+# Go, Rust, Python and Node CLI tools from .chezmoidata/packages.yaml, built
+# with each language's own installer: faster than Homebrew on Intel Macs,
+# where these formulae compile from source.
+# Re-runs whenever the lists change; bump a list to update.
 set -eu
+{{- $os := .chezmoi.os }}
+{{- $go := concat .packages.go.all (get .packages.go $os | default list) }}
+{{- $cargo := get .packages.cargo $os | default list }}
+{{- $pipx := get .packages.pipx $os | default list }}
+{{- $npm := get .packages.npm $os | default list }}
 
 if command -v go >/dev/null; then
-  go install golang.org/x/tools/gopls@latest
-  go install golang.org/x/tools/cmd/goimports@latest
-  go install honnef.co/go/tools/cmd/staticcheck@latest
-  go install github.com/golangci/golangci-lint/v2/cmd/golangci-lint@latest
+{{- range $go }}
+  go install {{ . }}
+{{- end }}
 fi
-{{- if eq .chezmoi.os "darwin" }}
+{{- if $cargo }}
 
 if command -v cargo >/dev/null; then
-  # delta: git diffs, hyperfine: command benchmarks, oha: HTTP load testing
-  nice -n 15 cargo install --locked git-delta hyperfine oha
+  nice -n 15 cargo install --locked {{ $cargo | join " " }}
+fi
+{{- end }}
+{{- if $pipx }}
+
+if command -v pipx >/dev/null; then
+{{- range $pipx }}
+  pipx install {{ . | quote }}
+{{- end }}
+fi
+{{- end }}
+{{- if $npm }}
+
+# Global npm packages; the distro's npm installs to /usr/local, so it needs sudo
+if command -v npm >/dev/null; then
+  missing=()
+  for p in {{ range $npm }}{{ . | quote }} {{ end }}; do
+    npm ls -g "$p" >/dev/null 2>&1 || missing+=("$p")
+  done
+  if [ ${#missing[@]} -gt 0 ]; then
+    sudo npm install -g "${missing[@]}"
+  fi
 fi
 {{- end }}

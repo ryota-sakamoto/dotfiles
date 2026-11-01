@@ -35,3 +35,16 @@
 	navigate = true
 	line-numbers = true
 {{- end }}
+{{- if lookPath "git-lfs" }}
+
+[filter "lfs"]
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+	clean = git-lfs clean -- %f
+{{- end }}
+
+# Machine-specific settings and secrets (sendemail, credential helper, a
+# different user.email): not in git. Last, so it overrides the above.
+[include]
+	path = ~/.gitconfig.local

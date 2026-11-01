@@ -1,7 +1,34 @@
 {{ if eq .chezmoi.os "linux" -}}
 #!/bin/bash
-# Base tools for Linux machines (remote node, ISUCON servers). Debian/Ubuntu only.
+# Linux packages from .chezmoidata/packages.yaml: dnf on Fedora (workstation),
+# apt on Debian/Ubuntu (remote node, ISUCON servers).
+# Re-runs whenever the package lists change.
 set -eu
+{{- if eq .chezmoi.osRelease.id "fedora" }}
+{{-   $pkgs := list }}
+{{-   range $group, $names := .packages.fedora }}
+{{-     $pkgs = concat $pkgs $names }}
+{{-   end }}
+
+if [ ! -f /etc/yum.repos.d/tailscale.repo ]; then
+  sudo dnf config-manager addrepo \
+    --from-repofile=https://pkgs.tailscale.com/stable/fedora/tailscale.repo
+fi
+
+# Install only what is missing, so a re-run with nothing new needs no sudo
+missing=()
+for p in {{ $pkgs | sortAlpha | uniq | join " " }}; do
+  rpm -q "$p" >/dev/null 2>&1 || missing+=("$p")
+done
+if [ ${#missing[@]} -gt 0 ]; then
+  sudo dnf install -y "${missing[@]}"
+fi
+{{-   if .packages.fedora.kernel }}
+
+# Kernel build dependencies (kunit, virtme-ng, cross builds)
+sudo dnf builddep -y kernel
+{{-   end }}
+{{- else }}
 
 if ! command -v apt-get >/dev/null; then
   echo "skipping package install: no apt-get" >&2
@@ -9,6 +36,6 @@ if ! command -v apt-get >/dev/null; then
 fi
 
 sudo apt-get update -q
-sudo apt-get install -y -q zsh zsh-autosuggestions zsh-syntax-highlighting \
-  tmux vim git curl jq fzf tree htop
+sudo apt-get install -y -q {{ .packages.debian | join " " }}
+{{- end }}
 {{ end -}}
